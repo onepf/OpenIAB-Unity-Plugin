@@ -1,0 +1,3 @@
+[submodule "OpenIAB"]
+	path = OpenIAB
+	url = https://github.com/onepf/OpenIAB.git
