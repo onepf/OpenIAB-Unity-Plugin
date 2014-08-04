@@ -120,7 +120,7 @@ namespace OnePF
                                 .Call<AndroidJavaObject>("setVerifyMode", (int) options.verifyMode);
 
                 foreach (var pair in options.storeKeys)
-                    j_optionsBuilder.Call<AndroidJavaObject>("addStoreKey", pair.Value, pair.Key);
+                    j_optionsBuilder.Call<AndroidJavaObject>("addStoreKey", pair.Key, pair.Value);
 
                 var addPreferredStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addPreferredStoreName", "([Ljava/lang/String;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
                 var prms = new jvalue[1];
