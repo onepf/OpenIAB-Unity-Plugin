@@ -29,6 +29,7 @@ import org.json.JSONStringer;
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.SkuManager;
 import org.onepf.oms.appstore.googleUtils.*;
+import org.onepf.oms.util.Logger;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -390,4 +391,17 @@ public class UnityPlugin {
             _helper.handleActivityResult(RC_REQUEST, Activity.RESULT_OK, data);
         }
     };
+
+    // Additional logging
+    public boolean isDebugLog() {
+        return Logger.isLoggable();
+    }
+
+    public void enableDebugLogging(boolean enabled) {
+        Logger.setLoggable(enabled);
+    }
+
+    public void enableDebugLogging(boolean enabled, String tag) {
+        Logger.setLoggable(enabled);
+    }
 }
