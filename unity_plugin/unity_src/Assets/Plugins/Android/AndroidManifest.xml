@@ -57,6 +57,8 @@
       </receiver>
     </application>
 
+    <uses-feature android:name="android.hardware.telephony" android:required="false"/>
+
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
