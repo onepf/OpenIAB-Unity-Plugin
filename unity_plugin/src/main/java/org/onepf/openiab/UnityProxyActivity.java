@@ -28,7 +28,9 @@ import org.onepf.oms.appstore.googleUtils.IabResult;
  * It is created when purchase is started
  */
 public class UnityProxyActivity extends Activity {
-
+    static final String ACTION_FINISH = "org.onepf.openiab.ACTION_FINISH";
+    private BroadcastReceiver broadcastReceiver;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +53,23 @@ public class UnityProxyActivity extends Activity {
                 UnityPlugin.instance().getPurchaseFinishedListener().onIabPurchaseFinished(new IabResult(IabHelper.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE, "Cannot start purchase process. Billing unavailable."), null);
             }
         }
+        
+         broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(UnityPlugin.TAG, "Finish broadcast was received");
+                finish();
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter(ACTION_FINISH));
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
+    }
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(UnityPlugin.TAG, "onActivityResult(" + requestCode + ", " + resultCode + ", " + data);
