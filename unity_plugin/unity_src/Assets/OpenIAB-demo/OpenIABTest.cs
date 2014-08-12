@@ -57,6 +57,7 @@ public class OpenIABTest : MonoBehaviour
     {
         // Map skus for different stores       
         OpenIAB.mapSku(SKU, OpenIAB_Android.STORE_GOOGLE, "sku");
+        OpenIAB.mapSku(SKU, OpenIAB_Android.STORE_AMAZON, "sku");
         OpenIAB.mapSku(SKU, OpenIAB_iOS.STORE, "sku");
         OpenIAB.mapSku(SKU, OpenIAB_WP8.STORE, "sku");
     }
@@ -109,7 +110,6 @@ public class OpenIABTest : MonoBehaviour
 
             var options = new Options();
             options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
-            options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE };
             options.storeKeys = new Dictionary<string, string> {
                 {OpenIAB_Android.STORE_GOOGLE, publicKey}
             };
