@@ -244,6 +244,7 @@ public class UnityPlugin {
      */
     IabHelper.OnIabPurchaseFinishedListener _purchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            UnityPlayer.currentActivity.sendBroadcast(new Intent(UnityProxyActivity.ACTION_FINISH));
             Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
             if (result.isFailure()) {
                 Log.e(TAG, "Error purchasing: " + result);
