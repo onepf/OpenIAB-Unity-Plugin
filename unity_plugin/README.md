@@ -57,10 +57,9 @@ Now you can run demo scene with some test buttons.
 4. Call ``` init ``` method passing it preferred stores list with public keys, in order to start billing service.
   ```c#
    OpenIAB.init(new Dictionary<string, string> {
-        {OpenIAB_Android.STORE_GOOGLE, "public_key"},
-        {OpenIAB_Android.STORE_TSTORE, "public_key"},
-        {OpenIAB_Android.STORE_SAMSUNG, "public_key"},
-        {OpenIAB_Android.STORE_YANDEX, "public_key"}
+        {OpenIAB_Android.STORE_GOOGLE, "google_public_key"},
+        {OpenIAB_Android.STORE_APPLAND, "appland_public_key"},
+        {OpenIAB_Android.STORE_YANDEX, "yandexpublic_key"}
     });
   ```
 
