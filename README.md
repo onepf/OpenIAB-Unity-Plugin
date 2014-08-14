@@ -11,9 +11,13 @@ Before build plugin you must:
 3. Unity must be closed while build is running.
 
 For build project you must run from terminal in `unity_plugin` directory of project<br>
-```groovy ../gradlew clean buildPlugin```<br>
+```groovy
+../gradlew clean buildPlugin
+```
 On Windows run<br>
-```groovy ..\gradlew.bat clean buildPlugin```
+```groovy
+..\gradlew.bat clean buildPlugin
+```
 
 If build was successfully, you can find output unitypackage file in directory<br>
 
