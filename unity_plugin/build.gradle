@@ -7,6 +7,7 @@ def unitySrcPath = "${unityRootAbsolutePath}${sep}Assets${sep}Plugins${sep}Andro
 def outAbsoluteDir = "${project.buildDir.absolutePath}${sep}intermediates${sep}unityPlugin${sep}classes"
 def outJarAbsoluteDir = "${project.buildDir.absolutePath}${sep}intermediates${sep}unityPlugin"
 def unityPackageAbsolutePath = "${project.buildDir.absolutePath}${sep}outputs"
+def openIabVersion = '0.9.7.1'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -24,22 +25,22 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'org.onepf:openiab:0.9.7.1:noFortumo'
+    compile "org.onepf:openiab:$openIabVersion:noFortumo"
 }
 
 task buildPlugin(dependsOn: 'assembleRelease') << {
     final def unityPath = getUnityExecutablePath()
+    delete fileTree(dir: unityPackageAbsolutePath , include: '*.unitypackage')
     delete fileTree(dir: outAbsoluteDir, include: "*")
     mkdir outAbsoluteDir
     mkdir unityPackageAbsolutePath
 
-    ant.unzip(src: "libs${sep}classes.jar", dest: outAbsoluteDir)
-
-    project.configurations.compile.any {
-        if (it.name.endsWith('.jar')) {
-            ant.unzip(src: it.absolutePath, dest: outAbsoluteDir)
-        }
+    def openIabJar = project.configurations.compile.find {
+        it.name.startsWith "openiab-${openIabVersion}-noFortumo"
     }
+
+    assert openIabJar != null
+    ant.unzip(src: openIabJar.absolutePath, dest: outAbsoluteDir)
 
 //    Copy compiled unity-plugin java source
     copy {
