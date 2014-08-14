@@ -24,7 +24,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(path: ':OpenIab Library', configuration: "noFortumoUnity")
+    compile 'org.onepf:openiab:0.9.7.1:noFortumo'
 }
 
 task buildPlugin(dependsOn: 'assembleRelease') << {
@@ -33,33 +33,21 @@ task buildPlugin(dependsOn: 'assembleRelease') << {
     mkdir outAbsoluteDir
     mkdir unityPackageAbsolutePath
 
-    ant.unzip(src: "${project(':OpenIab Library').projectDir.absolutePath}${sep}libs${sep}in-app-purchasing-1.0.3.jar", dest: outAbsoluteDir)
-    ant.unzip(src: "build${sep}intermediates${sep}exploded-aar${sep}OpenIAB-Unity-Plugin" +
-            "${sep}OpenIab Library${sep}unspecified${sep}noFortumoUnity${sep}classes.jar", dest: outAbsoluteDir)
+    ant.unzip(src: "libs${sep}classes.jar", dest: outAbsoluteDir)
+
+    project.configurations.compile.any {
+        if (it.name.endsWith('.jar')) {
+            ant.unzip(src: it.absolutePath, dest: outAbsoluteDir)
+        }
+    }
 
 //    Copy compiled unity-plugin java source
     copy {
-        from "${project(':Unity Plugin').projectDir.absolutePath}${sep}build${sep}intermediates${sep}classes${sep}release"
+        from "${project(':Unity Plugin').projectDir.absolutePath}" +
+                "${sep}build${sep}intermediates${sep}classes${sep}release"
         into outAbsoluteDir
         include '**/*.class'
     }
-//    Copy all aidl from library
-    copy {
-        from "${project(':OpenIab Library').projectDir.absolutePath}${sep}src"
-        into outAbsoluteDir
-        include '**/*.aidl'
-    }
-
-//    Remove unnecessary classes
-    delete "${outAbsoluteDir}${sep}org${sep}onepf${sep}oms${sep}appstore${sep}fortumoUtils"
-    delete fileTree(dir: "${outAbsoluteDir}${sep}org${sep}onepf${sep}oms${sep}appstore", include: "Fortumo*.class")
-    delete "${outAbsoluteDir}${sep}fortumo_res"
-    delete "${outAbsoluteDir}${sep}mp"
-    delete "${outAbsoluteDir}${sep}android"
-    delete "${outAbsoluteDir}${sep}com${sep}braintree"
-    delete "${outAbsoluteDir}${sep}com${sep}braintreegateway"
-    delete "${outAbsoluteDir}${sep}com${sep}skplanet"
-    delete "${outAbsoluteDir}${sep}com${sep}tmoney"
 
     project.exec {
         commandLine 'jar'
