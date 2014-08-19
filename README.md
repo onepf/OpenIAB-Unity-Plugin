@@ -22,7 +22,7 @@ Supported Stores:<br />
 **Windows phone 8:**   [Windows Phone Store](http://www.windowsphone.com/en-us/store "Windows Phone Store")
 
 ##Version
-This is version 0.9.7.1 of this plugin.
+The current version is 0.9.7.1.
 
 ##Tutorial
 For a comprehensive tutorial, Check-out the complete turorial on [master](https://github.com/onepf/OpenIAB-Unity-Plugin/blob/master/unity_plugin/unity_src/Assets/Plugins/OpenIAB_manual.pdf?raw=true) here.
