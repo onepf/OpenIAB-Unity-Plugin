@@ -46,6 +46,11 @@ public class UnityProxyActivity extends Activity {
             String developerPayload = i.getStringExtra("developerPayload");
             boolean inapp = i.getBooleanExtra("inapp", true);
 
+            if (UnityPlugin.instance().getHelper() == null) {
+                Log.e(UnityPlugin.TAG, "OpenIAB UnityPlugin not initialized!");
+                return;
+            }
+
             try {
                 if (inapp) {
                     UnityPlugin.instance().getHelper().launchPurchaseFlow(this, sku, UnityPlugin.RC_REQUEST, UnityPlugin.instance().getPurchaseFinishedListener(), developerPayload);
