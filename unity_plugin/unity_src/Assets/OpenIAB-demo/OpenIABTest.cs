@@ -109,10 +109,12 @@ public class OpenIABTest : MonoBehaviour
             var publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqibEPHCtfPm3Rn26gbE6vhCc1d6A072im+oWNlkUAJYV//pt1vCkYLqkkw/P2esPSWaw1nt66650vfVYc3sYY6L782n/C+IvZWQt0EaLrqsSoNfN5VqPhPeGf3wqsOvbKw9YqZWyKL4ddZUzRUPex5xIzjHHm3qIJI5v7iFJHOxOj0bLuEG8lH0Ljt/w2bNe4o0XXoshYDqpzIKmKy6OYNQOs8iBTJlfSmPrlGudmldW6CsuAKeVGm+Z+2xx3Xxsx3eSwEgEaUc1ZsMWSGsV6dXgc3JrUvK23JRJUu8X5Ec1OQLyxL3VelD5f0iKVTJ1kw59tMAVZ7DDpzPggWpUkwIDAQAB";
 
             var options = new Options();
+            options.checkInventoryTimeoutMs = Options.INVENTORY_CHECK_TIMEOUT_MS * 2;
+            options.discoveryTimeoutMs = Options.DISCOVER_TIMEOUT_MS * 2;
+            options.checkInventory = false;
             options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
-            options.storeKeys = new Dictionary<string, string> {
-                {OpenIAB_Android.STORE_GOOGLE, publicKey}
-            };
+            options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE, OpenIAB_Android.STORE_AMAZON, OpenIAB_Android.STORE_YANDEX };
+            options.storeKeys = new Dictionary<string, string> { {OpenIAB_Android.STORE_GOOGLE, publicKey} };
 
             // Transmit options and start the service
             OpenIAB.init(options);

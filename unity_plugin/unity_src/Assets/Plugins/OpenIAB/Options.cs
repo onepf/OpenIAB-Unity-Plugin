@@ -26,13 +26,13 @@ namespace OnePF
         /**
          * Default timeout (in milliseconds) for discover all OpenStores on device.
          */
-        private const int DISCOVER_TIMEOUT_MS = 5000;
+        public const int DISCOVER_TIMEOUT_MS = 5000;
 
         /** 
          * For generic stores it takes 1.5 - 3sec
          * SamsungApps initialization is very time consuming (from 4 to 12 seconds). 
          */
-        private const int INVENTORY_CHECK_TIMEOUT_MS = 10000;
+        public const int INVENTORY_CHECK_TIMEOUT_MS = 10000;
 
         /**
          * Wait specified amount of ms to find all OpenStores on device
