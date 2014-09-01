@@ -38,6 +38,15 @@ public class UnityProxyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(UnityPlugin.TAG, "Finish broadcast was received");
+                finish();
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter(ACTION_FINISH));
+
         if (UnityPlugin.sendRequest) {
             UnityPlugin.sendRequest = false;
 
@@ -56,15 +65,6 @@ public class UnityProxyActivity extends Activity {
                 UnityPlugin.instance().getPurchaseFinishedListener().onIabPurchaseFinished(new IabResult(IabHelper.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE, "Cannot start purchase process. Billing unavailable."), null);
             }
         }
-        
-         broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(UnityPlugin.TAG, "Finish broadcast was received");
-                finish();
-            }
-        };
-        registerReceiver(broadcastReceiver, new IntentFilter(ACTION_FINISH));
     }
 
     @Override
