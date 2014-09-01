@@ -205,6 +205,12 @@ public class UnityPlugin {
     }
 
     private void startProxyPurchaseActivity(String sku, boolean inapp, String developerPayload) {
+
+        if (UnityPlugin.instance().getHelper() == null) {
+            Log.e(UnityPlugin.TAG, "OpenIAB UnityPlugin not initialized!");
+            return;
+        }
+
         sendRequest = true;
         Intent i = new Intent(UnityPlayer.currentActivity, UnityProxyActivity.class);
         i.putExtra("sku", sku);
