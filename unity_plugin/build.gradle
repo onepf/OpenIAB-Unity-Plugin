@@ -7,7 +7,7 @@ def unitySrcPath = "${unityRootAbsolutePath}${sep}Assets${sep}Plugins${sep}Andro
 def outAbsoluteDir = "${project.buildDir.absolutePath}${sep}intermediates${sep}unityPlugin${sep}classes"
 def outJarAbsoluteDir = "${project.buildDir.absolutePath}${sep}intermediates${sep}unityPlugin"
 def unityPackageAbsolutePath = "${project.buildDir.absolutePath}${sep}outputs"
-def openIabVersion = '0.9.7.1'
+def openIabVersion = '0.9.7.2'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -25,7 +25,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile "org.onepf:openiab:$openIabVersion:noFortumo"
+    compile "org.onepf:openiab:$openIabVersion"
 }
 
 task buildPlugin(dependsOn: 'assembleRelease') << {
