@@ -90,6 +90,11 @@ public class OpenIABEventManager : MonoBehaviour
     }
 
 #if UNITY_ANDROID
+    private void OnMapSkuFailed(string exception)
+    {
+        Debug.LogError("SKU mapping failed: " + exception);
+    }
+
     private void OnBillingSupported(string empty)
     {
         if (billingSupportedEvent != null)

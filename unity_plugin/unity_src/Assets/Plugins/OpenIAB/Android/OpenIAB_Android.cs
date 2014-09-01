@@ -153,10 +153,9 @@ namespace OnePF
 
         public void mapSku(string sku, string storeName, string storeSku)
         {
-            if (IsDevice())
-            {
-                _plugin.Call("mapSku", sku, storeName, storeSku);
-            }
+            if (!IsDevice()) return;
+
+            _plugin.Call("mapSku", sku, storeName, storeSku);
         }
 
         public void unbindService()

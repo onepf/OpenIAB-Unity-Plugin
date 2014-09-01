@@ -43,6 +43,7 @@ public class UnityPlugin {
 
     public static final String TAG = "OpenIAB-UnityPlugin";
     private static final String EVENT_MANAGER = "OpenIABEventManager"; /**< Name of the event handler object in Unity */
+    private static final String MAP_SKU_FAILED_CALLBACK = "OnMapSkuFailed";
     private static final String BILLING_SUPPORTED_CALLBACK = "OnBillingSupported";
     private static final String BILLING_NOT_SUPPORTED_CALLBACK = "OnBillingNotSupported";
     private static final String QUERY_INVENTORY_SUCCEEDED_CALLBACK = "OnQueryInventorySucceeded";
@@ -86,8 +87,13 @@ public class UnityPlugin {
      * @param storeName
      * @param storeSku
      */
-    public void mapSku(String sku, String storeName, String storeSku)  {
-        SkuManager.getInstance().mapSku(sku, storeName, storeSku);
+    public void mapSku(String sku, String storeName, String storeSku) {
+        try {
+            SkuManager.getInstance().mapSku(sku, storeName, storeSku);
+        } catch (Exception e) {
+            Log.d(TAG, e.toString());
+            UnityPlayer.UnitySendMessage(EVENT_MANAGER, MAP_SKU_FAILED_CALLBACK, e.toString());
+        }
     }
 
     public void init(final HashMap<String, String> storeKeys) {
