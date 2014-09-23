@@ -27,6 +27,7 @@ public class OpenIABTest : MonoBehaviour
 
     string _label = "";
     bool _isInitialized = false;
+    Inventory _inventory = null;
 
     private void OnEnable()
     {
@@ -135,7 +136,8 @@ public class OpenIABTest : MonoBehaviour
 
         if (Button("Consume Product"))
         {
-            OpenIAB.consumeProduct(Purchase.CreateFromSku(SKU));
+            if (_inventory != null && _inventory.HasPurchase(SKU))
+                OpenIAB.consumeProduct(_inventory.GetPurchase(SKU));
         }
 
 // Android specific buttons
@@ -145,9 +147,10 @@ public class OpenIABTest : MonoBehaviour
             OpenIAB.purchaseProduct("android.test.purchased");
         }
 
-        if (Button("Test Refund"))
+        if (Button("Test Consume"))
         {
-            OpenIAB.purchaseProduct("android.test.refunded");
+            if (_inventory != null && _inventory.HasPurchase("android.test.purchased"))
+                OpenIAB.consumeProduct(_inventory.GetPurchase("android.test.purchased"));
         }
 
         if (Button("Test Item Unavailable"))
@@ -175,7 +178,10 @@ public class OpenIABTest : MonoBehaviour
     {
         Debug.Log("queryInventorySucceededEvent: " + inventory);
         if (inventory != null)
+        {
             _label = inventory.ToString();
+            _inventory = inventory;
+        }
     }
     private void queryInventoryFailedEvent(string error)
     {

@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Debug;
 import android.util.Log;
 import com.unity3d.player.UnityPlayer;
 import org.json.JSONException;
@@ -191,9 +192,9 @@ public class UnityPlugin {
 					String packageName = jsonObject.getString("packageName");
 					String token = jsonObject.getString("token");
                     Purchase p;
-                    if (jsonPurchaseInfo == null || jsonPurchaseInfo.equals("")) {
-                        p = new Purchase(appstoreName);
-                        p.setSku(jsonObject.getString("sku"));
+                    if (jsonPurchaseInfo == null || jsonPurchaseInfo.equals("") || jsonPurchaseInfo.equals("null")) {
+                        UnityPlayer.UnitySendMessage(EVENT_MANAGER, CONSUME_PURCHASE_FAILED_CALLBACK, "Original json is invalid: " + json);
+                        return;
                     } else {
                         String itemType = jsonObject.getString("itemType");
                         String signature = jsonObject.getString("signature");
@@ -202,8 +203,8 @@ public class UnityPlugin {
 					p.setPackageName(packageName);
 					p.setToken(token);
                     _helper.consumeAsync(p, _consumeFinishedListener);
-                    //Log.i(TAG, "CONSUME JSON: " + json);
                 } catch (org.json.JSONException e) {
+                    e.printStackTrace();
                     UnityPlayer.UnitySendMessage(EVENT_MANAGER, CONSUME_PURCHASE_FAILED_CALLBACK, "Invalid json: " + json + ". " + e);
                 }
             }
