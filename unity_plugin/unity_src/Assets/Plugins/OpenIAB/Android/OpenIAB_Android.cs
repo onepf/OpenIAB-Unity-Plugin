@@ -34,6 +34,7 @@ namespace OnePF
         public static readonly string STORE_SAMSUNG;
         public static readonly string STORE_NOKIA;
         public static readonly string STORE_YANDEX;
+        public static readonly string STORE_APTOIDE;
 
 #if UNITY_ANDROID
         private static AndroidJavaObject _plugin;
@@ -47,6 +48,7 @@ namespace OnePF
                 STORE_SAMSUNG = "STORE_SAMSUNG";
                 STORE_NOKIA = "STORE_NOKIA";
                 STORE_YANDEX = "STORE_YANDEX";
+                STORE_YANDEX = "STORE_APTOIDE";
                 return;
             }
 
@@ -61,6 +63,7 @@ namespace OnePF
                 STORE_SAMSUNG = pluginClass.GetStatic<string>("STORE_SAMSUNG");
                 STORE_NOKIA = pluginClass.GetStatic<string>("STORE_NOKIA");
                 STORE_YANDEX = pluginClass.GetStatic<string>("STORE_YANDEX");
+                STORE_APTOIDE = pluginClass.GetStatic<string>("STORE_APTOIDE");
             }
         }
 
@@ -260,6 +263,7 @@ namespace OnePF
             STORE_SAMSUNG = "STORE_SAMSUNG";
             STORE_NOKIA = "STORE_NOKIA";
             STORE_YANDEX = "STORE_YANDEX";
+            STORE_APTOIDE = "STORE_APTOIDE";
 		}
 #endif
     }
