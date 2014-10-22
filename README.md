@@ -14,7 +14,7 @@ Supported Stores:<br />
     - [Nokia Store](http://developer.nokia.com/nokia-x/publish-your-app "Nokia Store")<br />
     - [SlideMe](http://slideme.org/ "SlideMe")<br />
     - [Appland](http://www.applandinc.com/app-store/ "Appland")<br />
-    - [Apptoide](http://m.aptoide.com/ "Apptoide")<br />
+    - [Aptoide](http://m.aptoide.com/ "Aptoide")<br />
     - [AppMall](http://www.openmobileww.com/#!appmall/cunq "AppMall")<br />
 
 **iOS:**   [Apple Store](https://itunes.apple.com/en/genre/mobile-software-applications/id36?mt=8 "Apple Store")
