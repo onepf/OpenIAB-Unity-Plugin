@@ -25,7 +25,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile "org.onepf:openiab:$openIabVersion"
+    compile project(':library')
 }
 
 task buildPlugin(dependsOn: 'assembleRelease') << {
@@ -35,17 +35,18 @@ task buildPlugin(dependsOn: 'assembleRelease') << {
     mkdir outAbsoluteDir
     mkdir unityPackageAbsolutePath
 
-    def openIabJar = project.configurations.compile.find {
-        it.name.startsWith "openiab-${openIabVersion}"
-    }
+    //def openIabJar = project.configurations.compile.find {
+    //    it.name.startsWith "openiab-${openIabVersion}"
+    //}
 
-    assert openIabJar != null
+	def openIabJar = project.rootProject.file('OpenIAB/library/build/intermediates/bundles/release/classes.jar')
+	
+    //assert openIabJar != null
     ant.unzip(src: openIabJar.absolutePath, dest: outAbsoluteDir)
 
 //    Copy compiled unity-plugin java source
     copy {
-        from "${project(':Unity Plugin').projectDir.absolutePath}" +
-                "${sep}build${sep}intermediates${sep}classes${sep}release"
+        from "${project(':Unity Plugin').projectDir.absolutePath}" + "${sep}build${sep}intermediates${sep}classes${sep}release"
         into outAbsoluteDir
         include '**/*.class'
     }
