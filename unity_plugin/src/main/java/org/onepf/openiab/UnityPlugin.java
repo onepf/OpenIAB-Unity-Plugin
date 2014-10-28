@@ -54,12 +54,6 @@ public class UnityPlugin {
     private static final String CONSUME_PURCHASE_SUCCEEDED_CALLBACK = "OnConsumePurchaseSucceeded";
     private static final String CONSUME_PURCHASE_FAILED_CALLBACK = "OnConsumePurchaseFailed";
 
-    public static final String STORE_GOOGLE = OpenIabHelper.NAME_GOOGLE;
-    public static final String STORE_AMAZON = OpenIabHelper.NAME_AMAZON;
-    public static final String STORE_SAMSUNG = OpenIabHelper.NAME_SAMSUNG;
-    public static final String STORE_YANDEX = OpenIabHelper.NAME_YANDEX;
-	public static final String STORE_NOKIA = OpenIabHelper.NAME_NOKIA;
-
     public static final int RC_REQUEST = 10001; /**< (arbitrary) request code for the purchase flow */
     public static boolean sendRequest = false;
 

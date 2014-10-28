@@ -82,5 +82,7 @@ namespace OnePF
          * multiple stores installed on device that supports billing.
          */
         public string[] prefferedStoreNames = new string[] { };
+
+        public string[] availableStoreNames = new string[] { };
     }
 }

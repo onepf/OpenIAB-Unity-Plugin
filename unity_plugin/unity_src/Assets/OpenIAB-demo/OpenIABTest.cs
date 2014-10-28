@@ -115,6 +115,7 @@ public class OpenIABTest : MonoBehaviour
             options.checkInventory = false;
             options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
             options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE, OpenIAB_Android.STORE_AMAZON, OpenIAB_Android.STORE_YANDEX };
+            options.availableStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE, OpenIAB_Android.STORE_APPLAND };
             options.storeKeys = new Dictionary<string, string> { {OpenIAB_Android.STORE_GOOGLE, publicKey} };
 
             // Transmit options and start the service

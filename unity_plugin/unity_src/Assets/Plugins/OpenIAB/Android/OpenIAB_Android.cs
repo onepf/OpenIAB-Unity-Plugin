@@ -23,7 +23,7 @@ namespace OnePF
 {
     /**
      * Android billing implentation
-     */ 
+     */
     public class OpenIAB_Android
 #if UNITY_ANDROID
  : IOpenIAB
@@ -33,7 +33,12 @@ namespace OnePF
         public static readonly string STORE_AMAZON;
         public static readonly string STORE_SAMSUNG;
         public static readonly string STORE_NOKIA;
+        public static readonly string STORE_SKUBIT;
+        public static readonly string STORE_SKUBIT_TEST;
         public static readonly string STORE_YANDEX;
+        public static readonly string STORE_APPLAND;
+        public static readonly string STORE_SLIDEME;
+        public static readonly string STORE_APTOIDE;
 
 #if UNITY_ANDROID
         private static AndroidJavaObject _plugin;
@@ -46,7 +51,12 @@ namespace OnePF
                 STORE_AMAZON = "STORE_AMAZON";
                 STORE_SAMSUNG = "STORE_SAMSUNG";
                 STORE_NOKIA = "STORE_NOKIA";
+                STORE_SKUBIT = "STORE_SKUBIT";
+                STORE_SKUBIT_TEST = "STORE_SKUBIT_TEST";
                 STORE_YANDEX = "STORE_YANDEX";
+                STORE_APPLAND = "STORE_APPLAND";
+                STORE_SLIDEME = "STORE_SLIDEME";
+                STORE_APTOIDE = "STORE_APTOIDE";
                 return;
             }
 
@@ -56,12 +66,21 @@ namespace OnePF
             using (var pluginClass = new AndroidJavaClass("org.onepf.openiab.UnityPlugin"))
             {
                 _plugin = pluginClass.CallStatic<AndroidJavaObject>("instance");
-                STORE_GOOGLE = pluginClass.GetStatic<string>("STORE_GOOGLE");
-                STORE_AMAZON = pluginClass.GetStatic<string>("STORE_AMAZON");
-                STORE_SAMSUNG = pluginClass.GetStatic<string>("STORE_SAMSUNG");
-                STORE_NOKIA = pluginClass.GetStatic<string>("STORE_NOKIA");
-                STORE_YANDEX = pluginClass.GetStatic<string>("STORE_YANDEX");
             }
+
+            using (var pluginClass = new AndroidJavaClass("org.onepf.oms.OpenIabHelper"))
+            {
+                STORE_GOOGLE =      pluginClass.GetStatic<string>("NAME_GOOGLE");
+                STORE_AMAZON =      pluginClass.GetStatic<string>("NAME_AMAZON");
+                STORE_SAMSUNG =     pluginClass.GetStatic<string>("NAME_SAMSUNG");
+                STORE_NOKIA =       pluginClass.GetStatic<string>("NAME_NOKIA");
+                STORE_SKUBIT =      pluginClass.GetStatic<string>("NAME_SKUBIT");
+                STORE_SKUBIT_TEST = pluginClass.GetStatic<string>("NAME_SKUBIT_TEST");
+                STORE_YANDEX =      pluginClass.GetStatic<string>("NAME_YANDEX");
+                STORE_APPLAND =     pluginClass.GetStatic<string>("NAME_APPLAND");
+                STORE_SLIDEME =     pluginClass.GetStatic<string>("NAME_SLIDEME");
+                STORE_APTOIDE =     pluginClass.GetStatic<string>("NAME_APTOIDE");
+            }         
         }
 
         private bool IsDevice()
@@ -77,8 +96,7 @@ namespace OnePF
         private AndroidJavaObject CreateJavaHashMap(Dictionary<string, string> storeKeys)
         {
             var j_HashMap = new AndroidJavaObject("java.util.HashMap");
-            IntPtr method_Put = AndroidJNIHelper.GetMethodID(j_HashMap.GetRawClass(), "put",
-                "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+            IntPtr method_Put = AndroidJNIHelper.GetMethodID(j_HashMap.GetRawClass(), "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 
             if (storeKeys != null)
             {
@@ -126,6 +144,11 @@ namespace OnePF
                 var prms = new jvalue[1];
                 prms[0].l = AndroidJNIHelper.ConvertToJNIArray(options.prefferedStoreNames);
                 AndroidJNI.CallObjectMethod(objPtr, addPreferredStoreNameMethod, prms);
+
+                var addAvailableStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addAvailableStoreNames", "([Ljava/lang/String;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
+                prms = new jvalue[1];
+                prms[0].l = AndroidJNIHelper.ConvertToJNIArray(options.availableStoreNames);
+                AndroidJNI.CallObjectMethod(objPtr, addAvailableStoreNameMethod, prms);
 
                 // Build options instance
                 var buildMethod = AndroidJNI.GetMethodID(clazz, "build", "()Lorg/onepf/oms/OpenIabHelper$Options;");
