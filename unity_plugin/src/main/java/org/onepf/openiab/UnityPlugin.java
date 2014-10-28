@@ -300,7 +300,7 @@ public class UnityPlugin {
         JSONStringer json = new JSONStringer().object();
 
         json.key("purchaseMap").array();
-        for (Map.Entry<String, Purchase> entry : inventory.mPurchaseMap.entrySet()) {
+        for (Map.Entry<String, Purchase> entry : inventory.getPurchaseMap().entrySet()) {
             json.array();
             json.value(entry.getKey());
             json.value(purchaseToJson(entry.getValue()));
@@ -309,7 +309,7 @@ public class UnityPlugin {
         json.endArray();
 
         json.key("skuMap").array();
-        for (Map.Entry<String, SkuDetails> entry : inventory.mSkuMap.entrySet()) {
+        for (Map.Entry<String, SkuDetails> entry : inventory.getSkuMap().entrySet()) {
             json.array();
             json.value(entry.getKey());
             json.value(skuDetailsToJson(entry.getValue()));
