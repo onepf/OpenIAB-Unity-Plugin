@@ -135,7 +135,8 @@ namespace OnePF
                 j_optionsBuilder.Call<AndroidJavaObject>("setDiscoveryTimeout", options.discoveryTimeoutMs)
                                 .Call<AndroidJavaObject>("setCheckInventory", options.checkInventory)
                                 .Call<AndroidJavaObject>("setCheckInventoryTimeout", options.checkInventoryTimeoutMs)
-                                .Call<AndroidJavaObject>("setVerifyMode", (int) options.verifyMode);
+                                .Call<AndroidJavaObject>("setVerifyMode", (int) options.verifyMode)
+                                .Call<AndroidJavaObject>("setStoreSearchStrategy", (int) options.storeSearchStrategy);
 
                 foreach (var pair in options.storeKeys)
                     j_optionsBuilder.Call<AndroidJavaObject>("addStoreKey", pair.Key, pair.Value);
