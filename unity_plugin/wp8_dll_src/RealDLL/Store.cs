@@ -34,6 +34,24 @@ namespace OnePF.WP8
         public static event Action<string> ConsumeSucceeded;
         public static event Action<string> ConsumeFailed;
 
+        static string GetErrorDescription(Exception exception)
+        {
+            string errorMessage;
+            switch ((HResult) exception.HResult)
+            {
+                case HResult.E_FAIL:
+                    errorMessage = "Purchase cancelled";
+                    break;
+                case HResult.E_404:
+                    errorMessage = "Not found";
+                    break;
+                default:
+                    errorMessage = exception.Message;
+                    break;
+            }
+            return errorMessage;
+        }
+
         public static IEnumerable<string> Inventory
         {
             get
@@ -53,31 +71,48 @@ namespace OnePF.WP8
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
                 Dictionary<string, ProductListing> resultListings = new Dictionary<string, ProductListing>();
+                IAsyncOperation<ListingInformation> asyncOp;
                 try
                 {
-                    IAsyncOperation<ListingInformation> asyncOp = CurrentApp.LoadListingInformationByProductIdsAsync(productIds);
-                    asyncOp.Completed = (op, status) =>
-                    {
-                        var listings = op.GetResults();
-                        foreach (var l in listings.ProductListings)
-                        {
-                            var listing = l.Value;
-                            var resultListing = new ProductListing(
-                                listing.ProductId,
-                                listing.Name,
-                                listing.Description,
-                                listing.FormattedPrice);
-                            resultListings[l.Key] = resultListing;
-                        }
-                        if (LoadListingsSucceeded != null)
-                            LoadListingsSucceeded(resultListings);
-                    };
+                    asyncOp = CurrentApp.LoadListingInformationByProductIdsAsync(productIds);
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     if (LoadListingsFailed != null)
-                        LoadListingsFailed(e.Message);
+                        LoadListingsFailed(GetErrorDescription(e));
+                    return;
                 }
+
+                asyncOp.Completed = (op, status) =>
+                {
+                    if (op.Status == AsyncStatus.Error)
+                    {
+                        if (LoadListingsFailed != null)
+                            LoadListingsFailed(GetErrorDescription(op.ErrorCode));
+                        return;
+                    }
+
+                    if (op.Status == AsyncStatus.Canceled)
+                    {
+                        if (LoadListingsFailed != null)
+                            LoadListingsFailed("QueryInventory was cancelled");
+                        return;
+                    }
+
+                    var listings = op.GetResults();
+                    foreach (var l in listings.ProductListings)
+                    {
+                        var listing = l.Value;
+                        var resultListing = new ProductListing(
+                            listing.ProductId,
+                            listing.Name,
+                            listing.Description,
+                            listing.FormattedPrice);
+                        resultListings[l.Key] = resultListing;
+                    }
+                    if (LoadListingsSucceeded != null)
+                        LoadListingsSucceeded(resultListings);
+                };
             });
         }
 
@@ -93,23 +128,27 @@ namespace OnePF.WP8
                 }
                 catch (Exception e)
                 {
-                    string errorMessage;
-                    // When the user does not complete the purchase (e.g. cancels or navigates back from the Purchase Page), an exception with an HRESULT of E_FAIL is expected.
-                    switch ((HResult)e.HResult)
-                    {
-                        case HResult.E_FAIL:
-                            errorMessage = "Purchase cancelled";
-                            break;
-                        default:
-                            errorMessage = e.Message;
-                            break;
-                    }
                     if (PurchaseFailed != null)
-                        PurchaseFailed(errorMessage);
+                        PurchaseFailed(GetErrorDescription(e));
                     return;
                 }
+
                 asyncOp.Completed = (op, status) =>
                 {
+                    if (op.Status == AsyncStatus.Error)
+                    {
+                        if (PurchaseFailed != null)
+                            PurchaseFailed(GetErrorDescription(op.ErrorCode));
+                        return;
+                    }
+
+                    if (op.Status == AsyncStatus.Canceled)
+                    {
+                        if (PurchaseFailed != null)
+                            PurchaseFailed("Purchase was cancelled");
+                        return;
+                    }
+
                     string errorMessage;
                     ProductLicense productLicense = null;
                     if (CurrentApp.LicenseInformation.ProductLicenses.TryGetValue(productId, out productLicense))

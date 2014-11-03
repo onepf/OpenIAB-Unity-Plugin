@@ -60,7 +60,7 @@ public class OpenIABTest : MonoBehaviour
         OpenIAB.mapSku(SKU, OpenIAB_Android.STORE_GOOGLE, "sku");
         OpenIAB.mapSku(SKU, OpenIAB_Android.STORE_AMAZON, "sku");
         OpenIAB.mapSku(SKU, OpenIAB_iOS.STORE, "sku");
-        OpenIAB.mapSku(SKU, OpenIAB_WP8.STORE, "sku");
+        OpenIAB.mapSku(SKU, OpenIAB_WP8.STORE, "ammo");
     }
 
     const float X_OFFSET = 10.0f;

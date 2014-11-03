@@ -16,10 +16,11 @@
 
 namespace OnePF.WP8
 {
-    public enum HResult : long
+    public enum HResult : uint
     {
         S_OK = 0x00000000,
         E_FAIL = 0x80004005,
-        E_UNEXPECTED = 0x8000FFFF
+        E_UNEXPECTED = 0x8000FFFF,
+        E_404 = 0x805A0194
     }
 }
