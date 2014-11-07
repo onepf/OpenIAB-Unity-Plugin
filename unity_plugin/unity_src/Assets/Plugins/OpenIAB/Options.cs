@@ -86,5 +86,7 @@ namespace OnePF
         public string[] prefferedStoreNames = new string[] { };
 
         public string[] availableStoreNames = new string[] { };
+
+        public int samsungCertificationRequestCode;
     }
 }
