@@ -26,6 +26,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile project(':library')
+    compile 'com.amazon:in-app-purchasing:2.0.0'
+    compile 'com.braintree:fortumo-in-app:9.1.2'
 }
 
 task buildPlugin(dependsOn: 'assembleRelease') << {
