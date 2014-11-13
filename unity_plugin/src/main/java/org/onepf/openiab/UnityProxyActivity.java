@@ -42,7 +42,9 @@ public class UnityProxyActivity extends Activity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(UnityPlugin.TAG, "Finish broadcast was received");
-                finish();
+                if (!UnityProxyActivity.this.isFinishing()) {
+                    finish();
+                }
             }
         };
         registerReceiver(broadcastReceiver, new IntentFilter(ACTION_FINISH));
