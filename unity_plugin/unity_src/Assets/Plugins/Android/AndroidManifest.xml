@@ -49,15 +49,32 @@
               android:label="@string/app_name"
               android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
       </activity>
-      <receiver android:name="com.amazon.inapp.purchasing.ResponseReceiver">
+                
+      <receiver android:name="com.amazon.device.iap.ResponseReceiver">
         <intent-filter>
-          <action
+            <action
                 android:name="com.amazon.inapp.purchasing.NOTIFY"
-                android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"/>
+                android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY" />
         </intent-filter>
       </receiver>
     </application>
 
+    <!--Fortumo start-->
+    <receiver android:name="mp.MpSMSReceiver">
+        <intent-filter>
+            <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+        </intent-filter>
+    </receiver>
+    
+    <service android:name="mp.MpService" />
+    <service android:name="mp.StatusUpdateService" />
+    
+    <activity
+        android:name="mp.MpActivity"
+        android:configChanges="orientation|keyboardHidden|screenSize"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    <!--Fortumo end-->
+    
     <!--all-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!--Google Play-->
