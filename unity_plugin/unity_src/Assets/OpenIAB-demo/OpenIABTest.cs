@@ -114,8 +114,8 @@ public class OpenIABTest : MonoBehaviour
             options.discoveryTimeoutMs = Options.DISCOVER_TIMEOUT_MS * 2;
             options.checkInventory = false;
             options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
-            options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_AMAZON };
-            options.availableStoreNames = new string[] { OpenIAB_Android.STORE_AMAZON };
+            options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE };
+            options.availableStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE };
             options.storeKeys = new Dictionary<string, string> { {OpenIAB_Android.STORE_GOOGLE, publicKey} };
             options.storeSearchStrategy = SearchStrategy.INSTALLER_THEN_BEST_FIT;
 
