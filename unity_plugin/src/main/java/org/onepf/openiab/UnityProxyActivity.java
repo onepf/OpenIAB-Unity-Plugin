@@ -88,7 +88,5 @@ public class UnityProxyActivity extends Activity {
         } else {
             Log.d(UnityPlugin.TAG, "onActivityResult handled by IABUtil.");
         }
-
-        finish();
     }
 }
