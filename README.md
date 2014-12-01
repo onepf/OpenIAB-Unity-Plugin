@@ -61,20 +61,33 @@ path `unityExecutable` property  in `gradle.properties` file.
 Create and set up an Options object.
 ```
 var options = new Options();
+```
+
+Set store search strategy.
+```
 options.storeSearchStrategy = SearchStrategy.INSTALLER_THEN_BEST_FIT;
 ```
+
 Set available stores to restrict the set of stores to check.
 ```
 options.availableStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE, OpenIAB_Android.STORE_YANDEX };
 ```
+
 Set preferred store names (works only for store search strategy ```OpenIabHelper.Options.SEARCH_STRATEGY_BEST_FIT``` and ```OpenIabHelper.Options.SEARCH_STRATEGY_INSTALLER_THEN_BEST_FIT```).
 ```
 options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE, OpenIAB_Android.STORE_YANDEX };
 ```
+
+Set store keys.
+```
+options.storeKeys = new Dictionary<string, string> { {OpenIAB_Android.STORE_GOOGLE, "publicKey"} };
+```
+
 Set verifying mode (applicable only for Google Play, Appland, Aptoide, AppMall, SlideMe, Yandex.Store).
 ```
 options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
 ```
+
 Init with specified options.
 ```
 OpenIAB.init(options);
