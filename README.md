@@ -57,6 +57,28 @@ path `unityExecutable` property  in `gradle.properties` file.
 [1]: https://unity3d.com/unity/download
 [2]: http://www.gradle.org
 
+##Options
+Create and set up an Options object.
+```
+var options = new Options();
+options.storeSearchStrategy = SearchStrategy.INSTALLER_THEN_BEST_FIT;
+```
+Set available stores to restrict the set of stores to check.
+```
+options.availableStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE, OpenIAB_Android.STORE_YANDEX };
+```
+Set preferred store names (works only for store search strategy ```OpenIabHelper.Options.SEARCH_STRATEGY_BEST_FIT``` and ```OpenIabHelper.Options.SEARCH_STRATEGY_INSTALLER_THEN_BEST_FIT```).
+```
+options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE, OpenIAB_Android.STORE_YANDEX };
+```
+Set verifying mode (applicable only for Google Play, Appland, Aptoide, AppMall, SlideMe, Yandex.Store).
+```
+options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
+```
+Init with specified options.
+```
+OpenIAB.init(options);
+```
 
 ##Suggestions/Questions
 We seek to constantly improve our project and give Unity developers more power when working with in-app purchases. We are open to any comments and suggestions you may have regarding the additional features to be implemented in our plugin.
