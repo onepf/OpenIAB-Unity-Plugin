@@ -58,7 +58,7 @@ path `unityExecutable` property  in `gradle.properties` file.
 [2]: http://www.gradle.org
 
 ##Options
-Create and set up an Options object.
+Create Options object.
 ```
 var options = new Options();
 ```
