@@ -218,7 +218,6 @@ If you already have ```AndroidManifest.xml``` in your project, simply add there 
 <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="com.tmoney.vending.INBILLING"/>
 <uses-permission android:name="com.yandex.store.permission.BILLING"/>
