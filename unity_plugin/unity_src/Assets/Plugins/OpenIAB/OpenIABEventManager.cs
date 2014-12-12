@@ -89,7 +89,76 @@ public class OpenIABEventManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+    private void OnBillingSupported()
+    {
+        if (billingSupportedEvent != null)
+        {
+            billingSupportedEvent();
+        }
+    }
+
+    private void OnBillingNotSupported(string error)
+    {
+        if (billingNotSupportedEvent != null)
+            billingNotSupportedEvent(error);
+    }
+
+    private void OnQueryInventorySucceeded(OnePF.Inventory inventory)
+    {
+        if (queryInventorySucceededEvent != null)
+        {
+            queryInventorySucceededEvent(inventory);
+        }
+    }
+
+    private void OnQueryInventoryFailed(string error)
+    {
+        if (queryInventoryFailedEvent != null)
+            queryInventoryFailedEvent(error);
+    }
+
+    private void OnPurchaseSucceeded(string sku)
+    {
+        if (purchaseSucceededEvent != null)
+        {
+            purchaseSucceededEvent(Purchase.CreateFromSku(sku));
+        }
+    }
+
+    private void OnPurchaseFailed(string error)
+    {
+        if (purchaseFailedEvent != null)
+        {
+            purchaseFailedEvent(-1, error);
+        }
+    }
+
+    private void OnConsumePurchaseSucceeded(string json)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void OnConsumePurchaseFailed(string error)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPurchaseRestored(string sku)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnRestoreFailed(string error)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnRestoreFinished(string message)
+    {
+        throw new System.NotImplementedException();
+    }
+#elif UNITY_ANDROID
     private void OnMapSkuFailed(string exception)
     {
         Debug.LogError("SKU mapping failed: " + exception);
@@ -182,9 +251,7 @@ public class OpenIABEventManager : MonoBehaviour
             restoreSucceededEvent();
         }
     }
-#endif
-
-#if UNITY_IOS
+#elif UNITY_IOS
     private void OnBillingSupported(string empty)
     {
         if (billingSupportedEvent != null)
@@ -265,9 +332,7 @@ public class OpenIABEventManager : MonoBehaviour
             restoreSucceededEvent();
         }
     }
-#endif
-
-#if UNITY_WP8
+#elif UNITY_WP8
     public void OnBillingSupported()
     {
         if (billingSupportedEvent != null)

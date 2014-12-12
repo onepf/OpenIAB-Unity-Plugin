@@ -33,7 +33,13 @@ namespace OnePF
         public string CurrencyCode { get; private set; }
         public string PriceValue { get; private set; }
 
-        // Used for Android
+#if UNITY_EDITOR
+        public SkuDetails()
+        {
+        }
+#endif
+
+		// Used for Android
         public SkuDetails(string jsonString)
         {
             var json = new JSON(jsonString);

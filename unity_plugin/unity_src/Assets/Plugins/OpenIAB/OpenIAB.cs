@@ -36,7 +36,10 @@ namespace OnePF
          */
         static OpenIAB()
         {
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+            _billing = new OpenIAB_Mock();
+            Debug.Log("********** Mock OpenIAB plugin initialized **********");
+#elif UNITY_ANDROID
 			_billing = new OpenIAB_Android();
             Debug.Log("********** Android OpenIAB plugin initialized **********");
 #elif UNITY_IOS
