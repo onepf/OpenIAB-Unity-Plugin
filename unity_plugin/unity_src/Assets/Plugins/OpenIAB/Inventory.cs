@@ -30,6 +30,12 @@ namespace OnePF
         private Dictionary<String, SkuDetails> _skuMap = new Dictionary<String, SkuDetails>();
         private Dictionary<String, Purchase> _purchaseMap = new Dictionary<String, Purchase>();
 
+#if UNITY_EDITOR
+        public Inventory()
+        {
+        }
+#endif
+
         public Inventory(string json)
         {
             var j = new JSON(json);
