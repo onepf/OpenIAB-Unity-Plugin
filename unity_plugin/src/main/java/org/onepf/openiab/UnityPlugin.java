@@ -149,6 +149,10 @@ public class UnityPlugin {
         });
     }
 
+    public void queryInventory(final Object[] itemSkus) {
+        queryInventory(Arrays.copyOf(itemSkus, itemSkus.length, String[].class));
+    }
+
     public void queryInventory(final String[] itemSkus) {
         UnityPlayer.currentActivity.runOnUiThread(new Runnable() {
             @Override
@@ -156,6 +160,13 @@ public class UnityPlugin {
                 _helper.queryInventoryAsync(true, Arrays.asList(itemSkus), _queryInventoryListener);
             }
         });
+    }
+
+    public void queryInventory(final Object[] itemSkus, final Object[] subsSkus) {
+        queryInventory(
+            Arrays.copyOf(itemSkus, itemSkus.length, String[].class),
+            Arrays.copyOf(subsSkus, subsSkus.length, String[].class)
+        );
     }
 
     public void queryInventory(final String[] itemSkus, final String[] subsSkus) {

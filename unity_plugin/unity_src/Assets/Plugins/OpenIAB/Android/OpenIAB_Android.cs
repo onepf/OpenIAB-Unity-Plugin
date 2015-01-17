@@ -144,12 +144,12 @@ namespace OnePF
                 foreach (var pair in options.storeKeys)
                     j_optionsBuilder.Call<AndroidJavaObject>("addStoreKey", pair.Key, pair.Value);
 
-                var addPreferredStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addPreferredStoreName", "([Ljava/lang/String;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
+                var addPreferredStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addPreferredStoreName", "([Ljava/lang/Object;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
                 var prms = new jvalue[1];
                 prms[0].l = AndroidJNIHelper.ConvertToJNIArray(options.prefferedStoreNames);
                 AndroidJNI.CallObjectMethod(objPtr, addPreferredStoreNameMethod, prms);
 
-                var addAvailableStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addAvailableStoreNames", "([Ljava/lang/String;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
+                var addAvailableStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addAvailableStoreNames", "([Ljava/lang/Object;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
                 prms = new jvalue[1];
                 prms[0].l = AndroidJNIHelper.ConvertToJNIArray(options.availableStoreNames);
                 AndroidJNI.CallObjectMethod(objPtr, addAvailableStoreNameMethod, prms);
@@ -225,7 +225,7 @@ namespace OnePF
                 return;
             }
             jvalue[] args = AndroidJNIHelper.CreateJNIArgArray(new object[] { inAppSkus, subsSkus });
-            IntPtr methodId = AndroidJNI.GetMethodID(_plugin.GetRawClass(), "queryInventory", "([Ljava/lang/String;[Ljava/lang/String;)V");
+            IntPtr methodId = AndroidJNI.GetMethodID(_plugin.GetRawClass(), "queryInventory", "([Ljava/lang/Object;[Ljava/lang/Object;)V");
             AndroidJNI.CallVoidMethod(_plugin.GetRawObject(), methodId, args);
         }
 
@@ -281,13 +281,13 @@ namespace OnePF
             _plugin.Call("enableDebugLogging", enabled, tag);
         }
 #else
-		static OpenIAB_Android() {
+        static OpenIAB_Android() {
             STORE_GOOGLE = "STORE_GOOGLE";
             STORE_AMAZON = "STORE_AMAZON";
             STORE_SAMSUNG = "STORE_SAMSUNG";
             STORE_NOKIA = "STORE_NOKIA";
             STORE_YANDEX = "STORE_YANDEX";
-		}
+        }
 #endif
     }
 }
