@@ -43,6 +43,20 @@ namespace OnePF
 #if UNITY_ANDROID
         private static AndroidJavaObject _plugin;
 
+        IntPtr ConvertToStringJNIArray(string[] array)
+        {
+            IntPtr stringClass = AndroidJNI.FindClass("java/lang/String");
+            IntPtr initialString = AndroidJNI.NewStringUTF("");
+            IntPtr javaStringArray = AndroidJNI.NewObjectArray(array.Length, stringClass, initialString);
+
+            for (int i = 0; i < array.Length; ++i)
+            {
+                AndroidJNI.SetObjectArrayElement(javaStringArray, i, AndroidJNI.NewStringUTF(array[i]));
+            }
+
+            return javaStringArray;
+        }
+
         static OpenIAB_Android()
         {
             if (Application.platform != RuntimePlatform.Android)
@@ -146,12 +160,12 @@ namespace OnePF
 
                 var addPreferredStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addPreferredStoreName", "([Ljava/lang/String;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
                 var prms = new jvalue[1];
-                prms[0].l = AndroidJNIHelper.ConvertToJNIArray(options.prefferedStoreNames);
+                prms[0].l = ConvertToStringJNIArray(options.prefferedStoreNames);
                 AndroidJNI.CallObjectMethod(objPtr, addPreferredStoreNameMethod, prms);
 
                 var addAvailableStoreNameMethod = AndroidJNI.GetMethodID(clazz, "addAvailableStoreNames", "([Ljava/lang/String;)Lorg/onepf/oms/OpenIabHelper$Options$Builder;");
                 prms = new jvalue[1];
-                prms[0].l = AndroidJNIHelper.ConvertToJNIArray(options.availableStoreNames);
+                prms[0].l = ConvertToStringJNIArray(options.availableStoreNames);
                 AndroidJNI.CallObjectMethod(objPtr, addAvailableStoreNameMethod, prms);
 
                 // Build options instance
