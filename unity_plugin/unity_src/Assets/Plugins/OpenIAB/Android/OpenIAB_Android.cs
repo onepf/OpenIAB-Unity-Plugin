@@ -238,7 +238,11 @@ namespace OnePF
             {
                 return;
             }
-            jvalue[] args = AndroidJNIHelper.CreateJNIArgArray(new object[] { inAppSkus, subsSkus });
+
+            jvalue[] args = new jvalue[2];
+            args[0].l = ConvertToStringJNIArray(inAppSkus);
+            args[1].l = ConvertToStringJNIArray(subsSkus);
+
             IntPtr methodId = AndroidJNI.GetMethodID(_plugin.GetRawClass(), "queryInventory", "([Ljava/lang/String;[Ljava/lang/String;)V");
             AndroidJNI.CallVoidMethod(_plugin.GetRawObject(), methodId, args);
         }
