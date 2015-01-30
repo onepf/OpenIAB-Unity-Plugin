@@ -230,7 +230,7 @@ NSMutableArray* m_skuMap;
 			case SKPaymentTransactionStateFailed:
                 if (transaction.error == nil)
                     UnitySendMessage(EventHandler, "OnPurchaseFailed", MakeStringCopy("Transaction failed"));
-                if (transaction.error.code == SKErrorPaymentCancelled)
+                else if (transaction.error.code == SKErrorPaymentCancelled)
                     UnitySendMessage(EventHandler, "OnPurchaseFailed", MakeStringCopy("Transaction cancelled"));
                 else
                     UnitySendMessage(EventHandler, "OnPurchaseFailed", MakeStringCopy([[transaction.error localizedDescription] UTF8String]));
