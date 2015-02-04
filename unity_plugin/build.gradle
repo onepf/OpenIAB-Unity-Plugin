@@ -87,7 +87,7 @@ task buildPlugin(dependsOn: 'assembleRelease') << {
 
 def getUnityExecutablePath() {
     if (project.hasProperty('unityExecutable')) {
-        exePath = project.property('unityExecutable');
+        return project.property('unityExecutable');
     } else {
         def paths = ['unityMacPath', 'unityWin86Path', 'unityWin64Path',]
         for (path in paths) {
