@@ -65,6 +65,10 @@ namespace OnePF
         /// Current store name
         /// </summary>
         public string AppstoreName { get; private set; }
+        /// <summary>
+        /// Purchase Receipt of the order (iOS only)
+        /// </summary>
+        public string Receipt { get; private set;}
 
         private Purchase()
         {
@@ -88,6 +92,7 @@ namespace OnePF
             OriginalJson = json.ToString("originalJson");
             Signature = json.ToString("signature");
             AppstoreName = json.ToString("appstoreName");
+			Receipt = json.ToString("receipt");
         }
 
 #if UNITY_IOS
@@ -169,6 +174,7 @@ namespace OnePF
             j["originalJson"] = OriginalJson;
             j["signature"] = Signature;
             j["appstoreName"] = AppstoreName;
+            j["receipt"] = Receipt;
             return j.serialized;
         }
     }
