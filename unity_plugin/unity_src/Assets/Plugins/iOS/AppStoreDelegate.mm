@@ -245,7 +245,11 @@ NSMutableArray* m_skuMap;
                 
 			case SKPaymentTransactionStatePurchased:
                 [self storePurchase:transaction.payment.productIdentifier];
-                UnitySendMessage(EventHandler, "OnPurchaseSucceeded", MakeStringCopy([transaction.payment.productIdentifier UTF8String]));
+                // UnitySendMessage(EventHandler, "OnPurchaseSucceeded", MakeStringCopy([transaction.payment.productIdentifier UTF8String]));
+                NSString* s = [NSString stringWithFormat:@"{\"sku\": \"%@\", \"receipt\":\"%@\"}",
+                       transaction.payment.productIdentifier,
+                       [transaction.transactionReceipt base64Encoding]];
+                UnitySendMessage(EventHandler, "OnPurchaseSucceeded", MakeStringCopy([s UTF8String]));
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 break;
 		}
