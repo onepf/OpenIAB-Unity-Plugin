@@ -1,6 +1,9 @@
 OpenIAB Plugin. Open In-App Billing for Android, iOS and Windows Phone 8
 ====================
 
+##Releases
+The latest build is always available [here] (https://github.com/onepf/OpenIAB/releases).
+
 ##About
 Supporting in-app purchases for different platforms and stores is not a simple process. The developer has to study new API for each new store that he/she wants to use in an application.<br /><br />
 OpenIAB plugin enables Unity developers to reduce integration and maintenance time. The plugin uses one common interface for 3 mobile platforms: Android, iOS and Windows Phone 8. It’s based on [OpenIAB library](https://github.com/onepf/OpenIAB "OpenIAB") developed by One Platform Foundation team. <br /><br />
