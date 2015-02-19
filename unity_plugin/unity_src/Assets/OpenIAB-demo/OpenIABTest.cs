@@ -59,6 +59,7 @@ public class OpenIABTest : MonoBehaviour
         // Map skus for different stores       
         OpenIAB.mapSku(SKU, OpenIAB_Android.STORE_GOOGLE, "sku");
         OpenIAB.mapSku(SKU, OpenIAB_Android.STORE_AMAZON, "sku");
+        OpenIAB.mapSku(SKU, OpenIAB_Android.STORE_SAMSUNG, "100000105017/samsung_sku");
         OpenIAB.mapSku(SKU, OpenIAB_iOS.STORE, "sku");
         OpenIAB.mapSku(SKU, OpenIAB_WP8.STORE, "ammo");
     }
@@ -107,16 +108,20 @@ public class OpenIABTest : MonoBehaviour
         if (Button("Initialize OpenIAB"))
         {
             // Application public key
-            var publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgEEaiFfxugLWAH4CQqXYttXlj3GI2ozlcnWlZDaO2VYkcUhbrAz368FMmw2g40zgIDfyopFqETXf0dMTDw7VH3JOXZID2ATtTfBXaU4hqTf2lSwcY9RXe/Uz0x1nf1oLAf85oWZ7uuXScR747ekzRZB4vb4afm2DsbE30ohZD/WzQ22xByX6583yYE19RdE9yJzFckEPlHuOeMgKOa4WErt11PHB6FTdT5eN96/jjjeEoYhX/NGkOWKW0Y0T0A7CdUC0D4t2xxkzAQHdgLfcRw9+/EIcaysLhncWYiCifJrRBGpqZU1IrNuehrC5FXUN99786c/TwlxNG5nflE6sWwIDAQAB";
+            var googlePublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgEEaiFfxugLWAH4CQqXYttXlj3GI2ozlcnWlZDaO2VYkcUhbrAz368FMmw2g40zgIDfyopFqETXf0dMTDw7VH3JOXZID2ATtTfBXaU4hqTf2lSwcY9RXe/Uz0x1nf1oLAf85oWZ7uuXScR747ekzRZB4vb4afm2DsbE30ohZD/WzQ22xByX6583yYE19RdE9yJzFckEPlHuOeMgKOa4WErt11PHB6FTdT5eN96/jjjeEoYhX/NGkOWKW0Y0T0A7CdUC0D4t2xxkzAQHdgLfcRw9+/EIcaysLhncWYiCifJrRBGpqZU1IrNuehrC5FXUN99786c/TwlxNG5nflE6sWwIDAQAB";
+            var yandexPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApvU8l4ONEEsSGznPN6DnjIbJnv6vEgm08nbbi+2fMc0V46N7x7jBWTWAf2K6XLZg/rLUkqbWISq12PLvt7ydcsD+Hb9ZubdN2h8LNCTohVPeDbJjd5khtF4J5FNP2/XSTc1C7cSCBTGmqH0fUr77v4x/JMpxKlSjPN6KbNnaF2BLDAdi3012lz2XX4BVgUj7LArID/vYSYGlwMzMkvhUSpvZOM/WIPN+8YDgQAFBlRGRjLhY/3Vpq/AtXtVAzzyfTOZYkwNqdXpwAq5+/51LphowUI5NEBYh8lhQeOJmPNA6EcF1h5L9cJTVLy3bkuCXcjoN2eEO1Nq0h/40G0R4pwIDAQAB";
+            var slideMePublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAogOQb0mMbuq4FQ4ZhWRhN8k76/gXOUE370VubZa9Up25GdptYXoRNniecUTDLyjfvWp7+YFW8iPqIp523qNXtQ0EynNhK4xNLvJCd1CjfAju6M0f+o8MOL1zV7g3dHqxICZoHwqBbQOWneDzG/DzJ22AVdLKwty0qbv8ESaCOCJe31ZnoYVMw5KNVkSuRrrhiGGh6xj7F3qZ0T5TOSp3fK7soDamQLevuU7Ndn5IQACjo92HNN0O2PR2cvEjkCRuIkNk2hnqinac984JCzCC0SC/JBnUZUAeYJ7Y8sjT+79z1T1g7yGgDesopnqORiBkeXEZHrFy7PifdA/ZX7rRwQIDAQAB";
 
             var options = new Options();
             options.checkInventoryTimeoutMs = Options.INVENTORY_CHECK_TIMEOUT_MS * 2;
             options.discoveryTimeoutMs = Options.DISCOVER_TIMEOUT_MS * 2;
             options.checkInventory = false;
             options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
-            options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE };
-            options.availableStoreNames = new string[] { OpenIAB_Android.STORE_GOOGLE };
-            options.storeKeys = new Dictionary<string, string> { {OpenIAB_Android.STORE_GOOGLE, publicKey} };
+            options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_AMAZON };
+            options.availableStoreNames = new string[] { OpenIAB_Android.STORE_AMAZON };
+            options.storeKeys = new Dictionary<string, string> { {OpenIAB_Android.STORE_GOOGLE, googlePublicKey} };
+            options.storeKeys = new Dictionary<string, string> { { OpenIAB_Android.STORE_YANDEX, yandexPublicKey } };
+            options.storeKeys = new Dictionary<string, string> { { OpenIAB_Android.STORE_SLIDEME, slideMePublicKey } };
             options.storeSearchStrategy = SearchStrategy.INSTALLER_THEN_BEST_FIT;
 
             // Transmit options and start the service
