@@ -11,7 +11,7 @@ OpenIAB plugin comes with full source code under Apache 2.0 license.<br /><br />
 Supported Stores:<br />
 **Android:**<br />
     - [Google Play](https://play.google.com/store "Google Play")<br />
-    - [Amazon Appstore (only for Android < 5.0)](http://www.amazon.com/mobile-apps/b?node=2350149011 "Amazon Appstore")<br />
+    - [Amazon Appstore](http://www.amazon.com/mobile-apps/b?node=2350149011 "Amazon Appstore")<br />
     - [Yandex.Store](http://store.yandex.com/ "Yandex.Store")<br />
     - [Samsung Apps](http://apps.samsung.com/earth/main/getMain.as?COUNTRY_CODE=BLR "Samsung Apps")<br />
     - [Nokia Store](http://developer.nokia.com/nokia-x/publish-your-app "Nokia Store")<br />
@@ -25,7 +25,7 @@ Supported Stores:<br />
 **Windows phone 8:**   [Windows Phone Store](http://www.windowsphone.com/en-us/store "Windows Phone Store")
 
 ##Version
-The current version is 0.9.8.4.
+The current version is 0.9.8.6.
 
 ##Tutorial
 For a comprehensive tutorial, Check-out the complete turorial on [master](https://github.com/onepf/OpenIAB-Unity-Plugin/blob/master/unity_plugin/unity_src/Assets/Plugins/OpenIAB_manual.pdf?raw=true) here.
