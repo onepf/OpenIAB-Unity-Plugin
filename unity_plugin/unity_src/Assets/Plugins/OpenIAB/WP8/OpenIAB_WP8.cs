@@ -18,7 +18,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+#if UNITY_WP8
 using OnePF.WP8;
+#endif
 
 namespace OnePF
 {
