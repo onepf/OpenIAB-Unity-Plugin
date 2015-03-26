@@ -24,8 +24,9 @@ using System.Collections.Generic;
 public class OpenIABTest : MonoBehaviour
 {
     const string SKU = "sku";
-
+#pragma warning disable 0414
     string _label = "";
+#pragma warning restore 0414
     bool _isInitialized = false;
     Inventory _inventory = null;
 
