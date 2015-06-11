@@ -81,9 +81,8 @@ namespace OnePF
             var json = new JSON(Json);
             if (string.IsNullOrEmpty(PriceValue))
             {
-                float val = json.ToFloat("price_amount_micros");
-                val /= 1000000;
-                PriceValue = val.ToString();
+		string microPrice = json.ToString("price_amount_micros");
+		PriceValue = long.Parse (microPrice.Substring (0, microPrice.Length - 6));
             }
             if (string.IsNullOrEmpty(CurrencyCode))
                 CurrencyCode = json.ToString("price_currency_code");
