@@ -82,7 +82,7 @@ namespace OnePF
             if (string.IsNullOrEmpty(PriceValue))
             {
                 string microPrice = json.ToString("price_amount_micros");
-                PriceValue = long.Parse (microPrice.Substring (0, microPrice.Length - 6));
+                PriceValue = microPrice.Substring (0, microPrice.Length - 6);
             }
             if (string.IsNullOrEmpty(CurrencyCode))
                 CurrencyCode = json.ToString("price_currency_code");
