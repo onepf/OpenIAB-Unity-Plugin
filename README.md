@@ -34,14 +34,14 @@ For a comprehensive tutorial, Check-out the complete turorial on [master](https:
 You can check out this sample project [here](https://github.com/GrimReio/OpenIAB-sample-game).
 
 ##How to build plugin
-Plugin build view [Gradle][2]. You no need to download binary package of gradle tools, only requirements
-is installed JDK version 1.6 or great and setup JAVA_HOME environment variable.<br>
+Plugin build view [Gradle][2]. You don't need to download binary package of gradle tools, only requirements
+are installed JDK version 1.6 or great and setup JAVA_HOME environment variable.<br>
 <br>
-Before build plugin you must: <br>
+Before building plugin you must: <br>
 1. Install [Unity][1], start it and accept license agreement.
 2. Unity must be closed while build is running.
 
-For build project you must run from terminal in `unity_plugin` directory of project<br>
+For building project you must run from terminal in `unity_plugin` directory of project<br>
 ```groovy
 ../gradlew clean buildPlugin
 ```
@@ -50,7 +50,7 @@ On Windows run<br>
 ..\gradlew.bat clean buildPlugin
 ```
 
-If build was successfully, you can find output unitypackage file in directory<br>
+If build was successfull, you can find output unitypackage file in directory<br>
 
 `unity_plugin/build/outputs`
 
