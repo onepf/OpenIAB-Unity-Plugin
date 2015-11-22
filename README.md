@@ -1,3 +1,10 @@
+Dear friends
+-------------
+
+Currently our small team doesn't have enough time to support and develop the project. I hope in the nearest future we will continue the work.
+Thank you!
+
+
 OpenIAB Plugin. Open In-App Billing for Android, iOS and Windows Phone 8
 ====================
 
