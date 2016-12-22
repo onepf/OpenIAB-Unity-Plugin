@@ -61,6 +61,12 @@ NSSet* m_skus;
  */
 NSMutableArray* m_skuMap;
 
+/**
+ * Dictionary {sku: product}
+ */
+NSMutableDictionary* m_productMap;
+
+
 - (void)storePurchase:(NSString *)sku
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
@@ -97,6 +103,8 @@ NSMutableArray* m_skuMap;
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
     m_skus = nil;
     m_skuMap = nil;
+    m_productMap = nil;
+    [super dealloc];
 }
 
 
@@ -115,6 +123,7 @@ NSMutableArray* m_skuMap;
 - (void)productsRequest:(SKProductsRequest*)request didReceiveResponse:(SKProductsResponse*)response
 {
     m_skuMap = [[NSMutableArray alloc] init];
+    m_productMap = [[NSMutableDictionary alloc] init];
     
     NSArray* skProducts = response.products;
     for (SKProduct * skProduct in skProducts)
@@ -145,6 +154,7 @@ NSMutableArray* m_skuMap;
         
         NSArray* entry = [NSArray arrayWithObjects:skProduct.productIdentifier, skuDetails, nil];
         [m_skuMap addObject:entry];
+        [m_productMap setObject:skProduct forKey:skProduct.productIdentifier];
     }
     
     UnitySendMessage(EventHandler, "OnBillingSupported", MakeStringCopy(""));
@@ -160,7 +170,8 @@ NSMutableArray* m_skuMap;
 
 - (void)startPurchase:(NSString*)sku
 {
-    SKMutablePayment *payment = [SKMutablePayment paymentWithProductIdentifier:sku];
+    SKProduct* product = m_productMap[sku];
+    SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:product];
     [[SKPaymentQueue defaultQueue] addPayment:payment];
 }
 
@@ -220,10 +231,14 @@ NSMutableArray* m_skuMap;
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
-    for (SKPaymentTransaction *transaction in transactions)
-    {
-        switch (transaction.transactionState)
-        {
+	for (SKPaymentTransaction *transaction in transactions)
+	{
+		switch (transaction.transactionState)
+		{
+            case SKPaymentTransactionStatePurchasing:
+            case SKPaymentTransactionStateDeferred:
+                break;
+            
             case SKPaymentTransactionStateFailed:
                 if (transaction.error == nil)
                     UnitySendMessage(EventHandler, "OnPurchaseFailed", MakeStringCopy("Transaction failed"));
@@ -242,9 +257,13 @@ NSMutableArray* m_skuMap;
                 
             case SKPaymentTransactionStatePurchased:
                 [self storePurchase:transaction.payment.productIdentifier];
+                NSData *dataReceipt = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
+                NSString *receipt = [dataReceipt base64EncodedStringWithOptions:0];
+
                 NSDictionary *requestContents = [NSDictionary dictionaryWithObjectsAndKeys:
                                                  transaction.payment.productIdentifier, @"sku",
-                                                 [transaction.transactionReceipt base64Encoding], @"receipt",
+                                                 transaction.transactionIdentifier, @"orderId",
+                                                 receipt, @"receipt",
                                                  nil];
                 NSError *error;
                 NSData *requestData = [NSJSONSerialization dataWithJSONObject:requestContents
