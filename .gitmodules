@@ -1,6 +1,6 @@
 [submodule "sample"]
 	path = sample
-	url = https://github.com/GrimReio/OpenIAB-sample-game.git
+url=../OpenIAB-sample-game.git
 [submodule "OpenIAB"]
 	path = OpenIAB
 	url = ../OpenIAB.git
