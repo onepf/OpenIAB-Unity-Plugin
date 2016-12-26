@@ -280,16 +280,13 @@ NSMutableDictionary* m_productMap;
 
 - (NSString*)convertTransactionToJson: (SKPaymentTransaction*) transaction
 {
-    //NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
-    //NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
-    //NSString *receiptBase64 = [receipt base64EncodedStringWithOptions:0];
-
-    NSString *receiptBase64 = [transaction.transactionReceipt base64Encoding];
-
+    NSData *dataReceipt = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
+    NSString *receipt = [dataReceipt base64EncodedStringWithOptions:0];
+    
     NSDictionary *requestContents = [NSDictionary dictionaryWithObjectsAndKeys:
                                      transaction.payment.productIdentifier, @"sku",
                                      transaction.transactionIdentifier, @"orderId",
-                                     receiptBase64, @"receipt",
+                                     receipt, @"receipt",
                                      nil];
     NSError *error;
     NSData *requestData = [NSJSONSerialization dataWithJSONObject:requestContents

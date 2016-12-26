@@ -99,6 +99,7 @@ namespace OnePF
         public Purchase(JSON json) {
             ItemType = json.ToString("itemType");
             OrderId = json.ToString("orderId");
+            Receipt = json.ToString("receipt");
             PackageName = json.ToString("packageName");
             Sku = json.ToString("sku");
             PurchaseTime = json.ToLong("purchaseTime");

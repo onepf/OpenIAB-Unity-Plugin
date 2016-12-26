@@ -69,7 +69,7 @@ public class OpenIABEventManager : MonoBehaviour
     /**
      * Fired when transaction was restored
      */ 
-    public static event Action<string> transactionRestoredEvent;
+    public static event Action<Purchase> transactionRestoredEvent;
     
     /**
      * Fired when transaction restoration process failed
@@ -226,7 +226,8 @@ public class OpenIABEventManager : MonoBehaviour
     {
         if (purchaseFailedEvent != null)
         {
-            purchaseFailedEvent(-1, error);
+            // -1005 is similar to android "cancelled" code
+            purchaseFailedEvent(string.Equals(error, "Transaction cancelled")? -1005 : -1, error);
         }
     }
 
@@ -242,11 +243,11 @@ public class OpenIABEventManager : MonoBehaviour
             consumePurchaseFailedEvent(error);
     }
 
-    public void OnPurchaseRestored(string sku)
+    public void OnPurchaseRestored(string json)
     {
         if (transactionRestoredEvent != null)
         {
-            transactionRestoredEvent(sku);
+            transactionRestoredEvent(new Purchase(json));
         }
     }
 
