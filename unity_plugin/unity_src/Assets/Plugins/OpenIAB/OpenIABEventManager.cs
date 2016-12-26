@@ -159,11 +159,11 @@ public class OpenIABEventManager : MonoBehaviour
             consumePurchaseFailedEvent(error);
     }
 
-    public void OnTransactionRestored(string sku)
+    public void OnTransactionRestored(string json)
     {
         if (transactionRestoredEvent != null)
         {
-            transactionRestoredEvent(sku);
+            transactionRestoredEvent(new Purchase(json));
         }
     }
 
