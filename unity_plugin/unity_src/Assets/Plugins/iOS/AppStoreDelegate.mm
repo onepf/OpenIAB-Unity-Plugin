@@ -67,12 +67,12 @@ NSMutableArray* m_skuMap;
 NSMutableDictionary* m_productMap;
 
 
-- (void)storePurchase:(NSString *)sku
+- (void)storePurchase:(NSString*)sku transaction:(NSDictionary*)transaction
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if (standardUserDefaults)
     {
-        [standardUserDefaults setBool:YES forKey:sku];
+        [standardUserDefaults setObject:transaction forKey:sku];
         [standardUserDefaults synchronize];
     }
     else
@@ -87,7 +87,7 @@ NSMutableDictionary* m_productMap;
     static AppStoreDelegate* instance = nil;
     if (!instance)
         instance = [[AppStoreDelegate alloc] init];
-    
+
     return instance;
 }
 
@@ -123,7 +123,7 @@ NSMutableDictionary* m_productMap;
 {
     m_skuMap = [[NSMutableArray alloc] init];
     m_productMap = [[NSMutableDictionary alloc] init];
-    
+
     NSArray* skProducts = response.products;
     for (SKProduct * skProduct in skProducts)
     {
@@ -133,11 +133,11 @@ NSMutableDictionary* m_productMap;
         [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
         [numberFormatter setLocale:skProduct.priceLocale];
         NSString *formattedPrice = [numberFormatter stringFromNumber:skProduct.price];
-        
+
         NSLocale *priceLocale = skProduct.priceLocale;
         NSString *currencyCode = [priceLocale objectForKey:NSLocaleCurrencyCode];
         NSNumber *productPrice = skProduct.price;
-        
+
         // Setup sku details
         NSDictionary* skuDetails = [NSDictionary dictionaryWithObjectsAndKeys:
                                     @"product", @"itemType",
@@ -150,12 +150,12 @@ NSMutableDictionary* m_productMap;
                                     ([skProduct.localizedDescription length] == 0) ? @"" : skProduct.localizedDescription, @"description",
                                     @"", @"json",
                                     nil];
-        
+
         NSArray* entry = [NSArray arrayWithObjects:skProduct.productIdentifier, skuDetails, nil];
         [m_skuMap addObject:entry];
         [m_productMap setObject:skProduct forKey:skProduct.productIdentifier];
     }
-    
+
     UnitySendMessage(EventHandler, "OnBillingSupported", MakeStringCopy(""));
 }
 
@@ -183,13 +183,16 @@ NSMutableDictionary* m_productMap;
         NSLog(@"Couldn't access purchase storage. Purchase map won't be available.");
     else
         for (NSString* sku in m_skus)
-            if ([standardUserDefaults boolForKey:sku])
+            if ([[[standardUserDefaults dictionaryRepresentation] allKeys] containsObject:sku])
             {
+                NSDictionary* storedPurchase = [standardUserDefaults objectForKey:sku];
+
                 // TODO: Probably store all purchase information. Not only sku
                 // Setup purchase
                 NSDictionary* purchase = [NSDictionary dictionaryWithObjectsAndKeys:
                                           @"product", @"itemType",
-                                          @"", @"orderId",
+                                          [storedPurchase objectForKey:@"orderId"], @"orderId",
+                                          [storedPurchase objectForKey:@"receipt"], @"receipt"
                                           @"", @"packageName",
                                           sku, @"sku",
                                           [NSNumber numberWithLong:0], @"purchaseTime",
@@ -201,14 +204,14 @@ NSMutableDictionary* m_productMap;
                                           @"", @"signature",
                                           @"", @"appstoreName",
                                           nil];
-                
+
                 NSArray* entry = [NSArray arrayWithObjects:sku, purchase, nil];
                 [purchaseMap addObject:entry];
             }
-    
+
     [inventory setObject:purchaseMap forKey:@"purchaseMap"];
     [inventory setObject:m_skuMap forKey:@"skuMap"];
-    
+
     NSError* error = nil;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:inventory options:kNilOptions error:&error];
     NSString* message = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
@@ -231,15 +234,15 @@ NSMutableDictionary* m_productMap;
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
     NSString* jsonTransaction;
-    
+
     for (SKPaymentTransaction *transaction in transactions)
-	{
-		switch (transaction.transactionState)
-		{
+    {
+        switch (transaction.transactionState)
+        {
             case SKPaymentTransactionStatePurchasing:
             case SKPaymentTransactionStateDeferred:
                 break;
-            
+
             case SKPaymentTransactionStateFailed:
                 if (transaction.error == nil)
                     UnitySendMessage(EventHandler, "OnPurchaseFailed", MakeStringCopy("Transaction failed"));
@@ -249,28 +252,25 @@ NSMutableDictionary* m_productMap;
                     UnitySendMessage(EventHandler, "OnPurchaseFailed", MakeStringCopy([[transaction.error localizedDescription] UTF8String]));
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 break;
-                
+
             case SKPaymentTransactionStateRestored:
-                [self storePurchase:transaction.payment.productIdentifier];
-                
-                jsonTransaction = [self convertTransactionToJson:transaction.originalTransaction];
+                jsonTransaction = [self convertTransactionToJson:transaction.originalTransaction storeToUserDefaults:true];
                 if ([jsonTransaction  isEqual: @"error"])
                 {
                     return;
                 }
-                
+
                 UnitySendMessage(EventHandler, "OnPurchaseRestored", MakeStringCopy([jsonTransaction UTF8String]));
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 break;
-                
+
             case SKPaymentTransactionStatePurchased:
-                [self storePurchase:transaction.payment.productIdentifier];
-                jsonTransaction = [self convertTransactionToJson:transaction];
+                jsonTransaction = [self convertTransactionToJson:transaction storeToUserDefaults:true];
                 if ([jsonTransaction  isEqual: @"error"])
                 {
                     return;
                 }
-                
+
                 UnitySendMessage(EventHandler, "OnPurchaseSucceeded", MakeStringCopy([jsonTransaction UTF8String]));
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 break;
@@ -278,16 +278,25 @@ NSMutableDictionary* m_productMap;
     }
 }
 
-- (NSString*)convertTransactionToJson: (SKPaymentTransaction*) transaction
+- (NSString*)convertTransactionToJson: (SKPaymentTransaction*) transaction storeToUserDefaults:(bool)store
 {
-    NSData *dataReceipt = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
-    NSString *receipt = [dataReceipt base64EncodedStringWithOptions:0];
-    
+    //NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+    //NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+    //NSString *receiptBase64 = [receipt base64EncodedStringWithOptions:0];
+
+    NSString *receiptBase64 = [transaction.transactionReceipt base64EncodedStringWithOptions:0];
+
     NSDictionary *requestContents = [NSDictionary dictionaryWithObjectsAndKeys:
                                      transaction.payment.productIdentifier, @"sku",
                                      transaction.transactionIdentifier, @"orderId",
-                                     receipt, @"receipt",
+                                     receiptBase64, @"receipt",
                                      nil];
+    if (store){
+        [self storePurchase:transaction.payment.productIdentifier
+                transaction:requestContents
+         ];
+    }
+
     NSError *error;
     NSData *requestData = [NSJSONSerialization dataWithJSONObject:requestContents
                                                           options:0
