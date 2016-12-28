@@ -67,7 +67,7 @@ NSMutableArray* m_skuMap;
 NSMutableDictionary* m_productMap;
 
 
-- (void)storePurchase:(NSString*)sku transaction:(NSDictionary*)transaction
+- (void)storePurchase:(NSString*)transaction forSku:(NSString*)sku
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if (standardUserDefaults)
@@ -185,14 +185,22 @@ NSMutableDictionary* m_productMap;
         for (NSString* sku in m_skus)
             if ([[[standardUserDefaults dictionaryRepresentation] allKeys] containsObject:sku])
             {
-                NSDictionary* storedPurchase = [standardUserDefaults objectForKey:sku];
+                NSString* encodedPurchase =  [standardUserDefaults objectForKey:sku];
+                NSError *e = nil;
+                NSDictionary* storedPurchase = [NSJSONSerialization JSONObjectWithData:
+                                                [encodedPurchase dataUsingEncoding:NSUTF8StringEncoding]
+                                                                               options: NSJSONReadingMutableContainers error: &e];
+                if (!storedPurchase) {
+                    NSLog(@"Got an error while creating the JSON object: %@", e);
+                    continue;
+                }
 
                 // TODO: Probably store all purchase information. Not only sku
                 // Setup purchase
                 NSDictionary* purchase = [NSDictionary dictionaryWithObjectsAndKeys:
                                           @"product", @"itemType",
                                           [storedPurchase objectForKey:@"orderId"], @"orderId",
-                                          [storedPurchase objectForKey:@"receipt"], @"receipt"
+                                          [storedPurchase objectForKey:@"receipt"], @"receipt",
                                           @"", @"packageName",
                                           sku, @"sku",
                                           [NSNumber numberWithLong:0], @"purchaseTime",
@@ -291,11 +299,6 @@ NSMutableDictionary* m_productMap;
                                      transaction.transactionIdentifier, @"orderId",
                                      receiptBase64, @"receipt",
                                      nil];
-    if (store){
-        [self storePurchase:transaction.payment.productIdentifier
-                transaction:requestContents
-         ];
-    }
 
     NSError *error;
     NSData *requestData = [NSJSONSerialization dataWithJSONObject:requestContents
@@ -305,8 +308,14 @@ NSMutableDictionary* m_productMap;
         NSLog(@"Got an error while creating the JSON object: %@", error);
         return @"error";
     }
-    
+
     NSString * jsonString = [[NSString alloc] initWithData:requestData encoding:NSUTF8StringEncoding];
+
+    if (store){
+        [self storePurchase:jsonString
+                     forSku:transaction.payment.productIdentifier
+         ];
+    }
     
     return jsonString;
 }
