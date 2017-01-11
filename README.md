@@ -49,11 +49,11 @@ Before build plugin you must: <br>
 2. Unity must be closed while build is running.
 
 For build project you must run from terminal in `unity_plugin` directory of project<br>
-```groovy
+```bash
 ../gradlew clean buildPlugin
 ```
 On Windows run<br>
-```groovy
+```bash
 ..\gradlew.bat clean buildPlugin
 ```
 

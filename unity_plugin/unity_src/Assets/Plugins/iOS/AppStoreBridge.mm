@@ -76,7 +76,7 @@ extern "C"
         NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
         if (standardUserDefaults)
         {
-            return [standardUserDefaults boolForKey:ToString(sku)];
+            return [[[standardUserDefaults dictionaryRepresentation] allKeys] containsObject:ToString(sku)];
         }
         else
         {
