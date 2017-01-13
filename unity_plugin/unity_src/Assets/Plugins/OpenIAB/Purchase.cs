@@ -109,6 +109,7 @@ namespace OnePF
             OriginalJson = json.ToString("originalJson");
             Signature = json.ToString("signature");
             AppstoreName = json.ToString("appstoreName");
+            Receipt = json.ToString("receipt");
 
 			Sku = OpenIAB_iOS.StoreSku2Sku(Sku);
         }

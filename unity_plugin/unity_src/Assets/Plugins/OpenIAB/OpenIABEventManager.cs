@@ -218,7 +218,7 @@ public class OpenIABEventManager : MonoBehaviour
     {
         if (purchaseSucceededEvent != null)
         {
-            purchaseSucceededEvent(new Purchase(json));
+            purchaseSucceededEvent(new Purchase(new JSON(json)));
         }
     }
 
